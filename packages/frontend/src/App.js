@@ -28,6 +28,15 @@ function App() {
     setRefreshKey(k => k + 1);
   };
 
+  const updatePriority = async (id, priority) => {
+    await fetch(`/api/tasks/${id}/priority`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ priority })
+    });
+    setRefreshKey(k => k + 1);
+  };
+
   return (
     <>
       <CssBaseline />
@@ -72,7 +81,7 @@ function App() {
             <TaskForm onSave={handleSave} initialTask={editingTask} />
           </Box>
           <Box sx={{ flexGrow: 1, minHeight: 0, overflow: 'hidden' }}>
-            <TaskList key={refreshKey} onEdit={setEditingTask} />
+            <TaskList key={refreshKey} onEdit={setEditingTask} onUpdatePriority={updatePriority} />
           </Box>
         </Container>
       </Box>

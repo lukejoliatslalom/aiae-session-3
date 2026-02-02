@@ -92,3 +92,31 @@ li:last-child {
   color: #d32f2f;
   font-weight: bold;
 }
+
+/* Priority UI (from priority-field-ui-sketch.png) */
+:root {
+  --priority-gray: #7A7A7A;
+  --priority-blue: #07F2E6;
+}
+
+.priority-group {
+  display: inline-flex;
+  gap: 8px;
+}
+
+.priority-btn {
+  min-width: 48px;
+  padding: 6px 12px;
+  border-radius: 24px;
+  border: 1px solid var(--priority-gray);
+  background: transparent;
+  color: var(--priority-gray);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.priority-btn.selected {
+  border-color: var(--priority-blue);
+  background: var(--priority-blue);
+  color: #000;
+}

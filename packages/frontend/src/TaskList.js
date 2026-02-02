@@ -6,7 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import EventIcon from '@mui/icons-material/Event';
 
-function TaskList({ onEdit }) {
+function TaskList({ onEdit, onUpdatePriority }) {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -61,6 +61,23 @@ function TaskList({ onEdit }) {
       fetchTasks();
     } catch (err) {
       setError('Failed to delete task');
+    }
+  };
+
+  const handlePriorityChange = async (task, priority) => {
+    try {
+      if (onUpdatePriority) {
+        await onUpdatePriority(task.id, priority);
+      } else {
+        await fetch(`/api/tasks/${task.id}/priority`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ priority })
+        });
+      }
+      fetchTasks();
+    } catch (err) {
+      setError('Failed to update priority');
     }
   };
 
@@ -203,6 +220,18 @@ function TaskList({ onEdit }) {
                 gap: 1
               }}
             >
+              <div className="priority-group" aria-label="Priority">
+                {['P1','P2','P3'].map((p) => (
+                  <button
+                    key={p}
+                    className={`priority-btn ${task.priority === p ? 'selected' : ''}`}
+                    onClick={() => handlePriorityChange(task, p)}
+                    aria-pressed={task.priority === p}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
               {task.due_date && (
                 <Chip
                   icon={<EventIcon sx={{ fontSize: 14 }} />}
